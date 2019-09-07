@@ -74,7 +74,7 @@ app.post('/api/users', async (req, res, next) => {
 
     const saltRounds = 10;
 
-    //check if email already exists
+    //check if email already exists same way as login
 
     bcrypt.hash(password, saltRounds, async function(err, hash) {
         // Store hash in your password DB.
@@ -90,7 +90,7 @@ app.post('/api/users', async (req, res, next) => {
         });
 })
 
-var key;
+const key = 'abcd';
 
 app.post('/api/users/login', async (req, res, next) => {
 
@@ -111,7 +111,7 @@ app.post('/api/users/login', async (req, res, next) => {
         const db = {
             "id": rows[0].id
         };
-        const key = 'abcd';
+
         const token = jwt.encode(db, key);
     
         res.json({
@@ -132,7 +132,7 @@ MIDDLEWARE
 */
 
 function isLoggedIn(req, res, next) {
-    var receivedToken = req.headers.authorization; //probably gonna change but whatever
+    var receivedToken = req.headers.authorization.split("Bearer ")[1]; //probably gonna change but whatever
     var decodedToken = jwt.decode(receivedToken, key)
     req.user = decodedToken;
 
@@ -149,26 +149,17 @@ BOOKS API
 
 
 
-app.get('/api/books', (req, res, next) => {
-    var user = req.user;
+app.get('/api/books', isLoggedIn, async (req, res, next) => {
 
-    /* gets user's books from DB. Hard coded for now */
-    var books = [
-        {
-            "id": 1,
-            "name": "My book",
-            "color": "green",
-            "text": "abcd"
-        },
-        {
-            "id": 2,
-            "name": "My book",
-            "color": "red",
-            "text": "efgh"
-        }
-    ]
+    /* gets user's books from DB. */
 
-    res.json(books)
+    const [rows] = await connection.execute(`
+        SELECT id, color, name, content FROM books WHERE userID = ?
+    `, [req.user.id])
+
+    console.log(rows)
+
+    res.json(rows)
 })
 
 app.post('/api/books', isLoggedIn, (req, res, next) => {
