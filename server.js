@@ -173,7 +173,16 @@ app.post('/api/books', isLoggedIn, (req, res, next) => {
     else {
         res.sendStatus(403); //if they're not logged in from us do we jus yeet them back to landing?
     }
-})
+});
+
+app.get('/api/book/:id', isLoggedIn, (req, res) => {
+    res.json({
+        id: 1,
+        color: "#F7FEE7",
+        name: "John's Dream Journal",
+        content: "I had a good dream."
+    })
+});
 
 app.put('/api/books/:id', isLoggedIn, (req, res, next) => {
     if (isLoggedIn) {
