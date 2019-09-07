@@ -1,0 +1,212 @@
+.bookView{
+    position: relative;
+    height: 210px;
+    width: 153px;
+    margin: 48px auto;
+
+    transform-origin: center center;
+    transform-style: preserve-3d;
+    transition: transform 0.4s;
+}
+
+.bookView:hover:not(.open){
+    transform: scale(1.1) rotateZ(-5deg);
+}
+
+.bookView > a {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 500;
+}
+
+.flippable{
+    position: relative;
+    height: 100%;
+    width: 100%;
+    box-shadow: 0px 8px 0px 0px rgba(73, 48, 38, 0.25);
+    transform-origin: center bottom;
+    transform-style: preserve-3d;
+    transition: transform 0.4s, box-shadow 0.4s; 
+}
+.bookView.open .flippable{
+    box-shadow: none;
+}
+
+.bookView.small > .flippable{
+    transform: scale(0.3);
+}
+
+.bookView.open:not(:hover) > .flippable{
+    transform: rotateX(40deg);
+}
+
+.bookView.open.small:not(:hover) > .flippable{
+    transform: scale(0.3) rotateX(40deg);
+}
+
+.bookView.open.small:not(:hover){
+    transform: translateX(22px);
+}
+
+.flippable .bookCover{
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    border-radius: 0px 14px 0px 0px;
+}
+
+.flippable .bookCover:last-child{
+    top: -100%;
+}
+
+.flippable .bookSpine{
+    position: absolute;
+    height: 210px;
+    width: 17px;
+    background: rgba(73, 48, 38, 0.25);
+}
+.flippable .bookBottom{
+    position: absolute;
+    width: 100%;
+    height: 16px;
+    bottom: 0;
+
+    transform-origin: bottom center;
+    transform: rotateX(90deg);
+    background: white;
+}
+
+.flippable .bookPage{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 95%;
+    height: 95%;
+    margin-top: 2.5%;
+
+    border-radius: 0px 14px 0px 0px;
+    background: linear-gradient(to right, #F7FEE7, white);
+}
+
+
+
+.flippable > div{
+    transform-origin: left;
+}
+
+.bookView.open > .flippable > div{
+    box-shadow: 0px 1px 2px 2px rgba(20,20,20,0.1);
+}
+
+
+.flippable .bookCover{
+    transform: rotateY(0deg);
+    transition: transform 0.4s;
+}
+.bookView.open:not(:hover) .bookCover:first-child{
+    transform: rotateY(-160deg) translateX(-2px);
+    transition: transform 0.4s;
+}
+.bookView.open:not(:hover) .bookCover:last-child{
+    transform: rotateY(-20deg) translateX(-2px);
+    transition: transform 0.4s;
+}
+
+
+.flippable .bookPage:nth-child(2){
+    transform: rotateY(0deg) translateZ(-2px);
+    transition: transform 0.4s;
+}
+.bookView.open:not(:hover) .bookPage:nth-child(2){
+    transform: rotateY(-140deg);
+    transition: transform 0.4s;
+}
+
+
+.flippable .bookPage:nth-child(3){
+    transform: rotateY(0deg) translateZ(-4px);
+    transition: transform 0.4s;
+}
+.bookView.open:not(:hover) .bookPage:nth-child(3){
+    transform: rotateY(-120deg);
+    transition: transform 0.4s;
+}
+
+.flippable .bookPage:nth-child(4){
+    transform: rotateY(0deg) translateZ(-6px);
+    transition: transform 0.4s;
+}
+.bookView.open:not(:hover) .bookPage:nth-child(4){
+    transform: rotateY(-100deg);
+    transition: transform 0.4s;
+}
+
+.flippable .bookPage:nth-child(5){
+    transform: rotateY(0deg) translateZ(-8px);
+    transition: transform 0.4s;
+}
+.bookView.open:not(:hover) .bookPage:nth-child(5){
+    transform: rotateY(-80deg);
+    transition: transform 0.4s;
+}
+
+.flippable .bookPage:nth-child(6){
+    transform: rotateY(0deg) translateZ(-10px);
+    transition: transform 0.4s;
+}
+.bookView.open:not(:hover) .bookPage:nth-child(6){
+    transform: rotateY(-60deg) translateZ(-10px);
+    transition: transform 0.4s;
+}
+
+.flippable .bookPage:nth-child(7){
+    transform: rotateY(0deg) translateZ(-12px);
+    transition: transform 0.4s;
+}
+.bookView.open:not(:hover) .bookPage:nth-child(7){
+    transform: rotateY(-40deg);
+    transition: transform 0.4s;
+}
+
+
+.booksView{
+    display: flex;
+    overflow-x: visible;
+    width: 618px;
+    flex-grow: 1;
+    margin: 0px auto;
+    flex-wrap: wrap;
+    padding: 16px;
+    justify-content: space-between;
+
+    overflow-y: auto;
+}
+
+@media (max-width: 700px){
+    .booksView{
+        width: 80%;
+        flex-direction: row;
+    }
+}
+
+.booksView .book {
+    height: 300px;
+}
+
+.booksView .book .text{
+    font-family: Laila;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    font-size: 19.1267px;
+    text-align: center;
+    vertical-align: bottom;
+
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.booksView .book .bookView{
+    margin-bottom: 30px;
+}

@@ -1,0 +1,19 @@
+.landingLogo{
+    text-align: center;
+    
+    color: #493026;
+    
+    font-family: Laila;
+    font-weight: 600;
+    font-size: 116px;
+
+    width: 100%;
+    margin-top: 204px;
+
+}
+
+.landingLogo + .buttonView {
+    height: 72px;
+    width: 198px;
+    margin-top: 39px;
+}

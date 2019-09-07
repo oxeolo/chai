@@ -1,0 +1,27 @@
+.composeView{
+    width: 700px;
+    flex-grow: 1;
+    margin: 32px auto;
+
+    
+    font-family: Laila;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 33px;
+    font-size: 19.1667px;
+    color: rgba(0, 0, 0, 0.5);
+
+    appearance: none;
+    border: none;
+    background: transparent;
+}
+
+@media (max-width: 800px){
+    .composeView{
+        width: 80%;
+    }
+}
+
+.composeView:focus{
+    outline: none;
+}
