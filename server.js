@@ -162,7 +162,6 @@ app.get('/api/books', isLoggedIn, async (req, res, next) => {
 
 app.post('/api/books', isLoggedIn, (req, res, next) => {
     if (isLoggedIn) {
-        const bookInfo = req.body;
 
         res.sendStatus(201);
         
@@ -173,7 +172,7 @@ app.post('/api/books', isLoggedIn, (req, res, next) => {
     }
 });
 
-app.get('/api/book/:id', isLoggedIn, async (req, res) => {
+app.get('/api/books/:id', isLoggedIn, async (req, res) => {
 
     const [rows] = await connection.execute(`
         SELECT id, userID, color, name, content FROM books WHERE id = ?
@@ -183,17 +182,19 @@ app.get('/api/book/:id', isLoggedIn, async (req, res) => {
 
 });
 
-app.put('/api/books/:id', isLoggedIn, (req, res, next) => {
-    if (isLoggedIn) {
-        bookInfo = req.body;
+app.put('/api/books/:id', isLoggedIn, async (req, res, next) => {
+    const {content, name, color} = req.body;
 
-        res.sendStatus(200);
+    const [response] = await connection.execute(`
+        UPDATE books 
+        SET 
+        content = ?,
+        name = ?,
+        color = ?
+        WHERE id = ?
+    ` [content, name, color, req.params.id])
 
-        next();
-    }
-    else{
-        res.sendStatus(403);
-    }
+    res.sendStatus(200)
 })
 
 
