@@ -2,7 +2,7 @@ const express = require('express');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 
-var mysql = require('mysql2');
+var mysql = require('mysql2/promise');
 require('dotenv').config();
 
 const app = express();
@@ -12,6 +12,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
 
 var jwt = require('jwt-simple');
+var bcrypt = require('bcrypt');
 
 app.listen(4000);
 
@@ -22,36 +23,36 @@ MYSQL DATABASE
 */ 
 
 const dbConfig = {
-    user: process.env.USER,
-    password: process.env.PASSWORD,
-    host: process.env.HOST,
-    server: process.env.SERVER,
-    database: process.env.DATABASE
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE
 }
 
-const connection = mysql.createConnection(dbConfig);
+let connection;
 
-// connection.execute(`
-//     SELECT name FROM users WHERE id = ? AND dob = ?
-// `, [query.id])
+const connect = async () => {
+    connection = await mysql.createConnection(dbConfig)
+}
+connect();
 
-connection.connect(function(err){
-    if (err){
-        return console.error(err.message);
-    }
+// connection.connect(function(err){
+//     if (err){
+//         return console.error(err.message);
+//     }
 
-    connection.query(createUsers, function(err, results, fields){
-        if (err){
-            console.log(err.message);
-        }
-    });
+//     connection.query(createUsers, function(err, results, fields){
+//         if (err){
+//             console.log(err.message);
+//         }
+//     });
 
-    connection.end(function(err){
-        if (err){
-            return console.log(err.message)
-        }
-    });
-});
+//     connection.end(function(err){
+//         if (err){
+//             return console.log(err.message)
+//         }
+//     });
+// });
 
 
 /*
@@ -61,43 +62,67 @@ USER API
 */
 
 function createUser(req, res, next) {
-    return true;
+    next();
 }
 
-app.post('/api/users', (req, res, next) => {
-    if (createUser) {
-        var name = req.body.name;
-        var email = req.body.email;
-        var password = req.body.password;
+app.post('/api/users', async (req, res, next) => {
 
-      
+    console.log(req.body)
+
+    const email = req.body.email;
+    const password = req.body.password;
+
+    const saltRounds = 10;
+
+    //check if email already exists
+
+    bcrypt.hash(password, saltRounds, async function(err, hash) {
+        // Store hash in your password DB.
+
+        console.log(err)
+        console.log(hash)
+
+        const [response] = await connection.execute(`
+            INSERT INTO users(email, hash) VALUES (?, ?)
+        `, [email, hash])
 
         res.sendStatus(201);
-
-        // next();
-    }
-    else{
-        res.sendStatus(403);
-    }
+        });
 })
 
 var key;
 
-app.post('/api/users/login', (req, res, next) => {
-    const payload = req.body;
-    const key = 'abcd';
+app.post('/api/users/login', async (req, res, next) => {
 
-    /* DB code to get id */
+    const [rows] = await connection.execute(`
+        SELECT id, hash FROM users WHERE email = ?
+    `, [req.body.email])
 
-    const db = {
-        "id": 1
+    if (rows.length == 0){
+        res.sendStatus(404)
     }
 
-    const token = jwt.encode(db, key);
+    //check password
+    const match = await bcrypt.compare(req.body.password, rows[0].hash);
+    
+    if(match) {
 
-    res.json({
-        "token": token
-    })
+        //login
+        const db = {
+            "id": rows[0].id
+        };
+        const key = 'abcd';
+        const token = jwt.encode(db, key);
+    
+        res.json({
+            "token": token
+        });
+    }
+    
+    else{
+        res.sendStatus(404)
+    }
+
 })
 
 /*
@@ -122,7 +147,7 @@ BOOKS API
 
 */
 
-const bookInfo;
+
 
 app.get('/api/books', (req, res, next) => {
     var user = req.user;
@@ -148,7 +173,7 @@ app.get('/api/books', (req, res, next) => {
 
 app.post('/api/books', isLoggedIn, (req, res, next) => {
     if (isLoggedIn) {
-        bookInfo = req.body;
+        const bookInfo = req.body;
 
         res.sendStatus(201);
         
