@@ -1,11 +1,13 @@
-import React, {Component} from 'react';
-import './composeView.css';
+import React, { Component } from "react";
+import "./composeView.css";
 
-
-const ComposeView = ({}) => (
-    <textarea className = 'composeView'
-            placeholder = "What's on your mind?"
-    />
-)
+const ComposeView = ({ value, onChange }) => (
+  <textarea
+    className="composeView"
+    placeholder="What's on your mind?"
+    value={value}
+    onChange={e => onChange(e.currentTarget.value)}
+  />
+);
 
 export default ComposeView;

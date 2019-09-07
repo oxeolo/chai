@@ -20,13 +20,6 @@ Axios.interceptors.request.use(config => {
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      books: {
-        abc: { id: "abc", color: Colors.mint, title: "Journal" },
-        def: { id: "def", color: Colors.coral, title: "To Do" },
-        ghi: { id: "ghi", color: Colors.vanilla, title: "Travel" }
-      }
-    };
   }
 
   render() {
@@ -41,9 +34,7 @@ class App extends Component {
           />
           <Route
             path="/app/compose/:id"
-            component={({ match }) => (
-              <ComposePage match={match} books={this.state.books} />
-            )}
+            component={ComposePage}
           />
         </div>
       </Router>

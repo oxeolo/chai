@@ -192,7 +192,7 @@ app.put('/api/books/:id', isLoggedIn, async (req, res, next) => {
         name = ?,
         color = ?
         WHERE id = ?
-    ` [content, name, color, req.params.id])
+    `, [content, name, color, req.params.id])
 
     res.sendStatus(200)
 })

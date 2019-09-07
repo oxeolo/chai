@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import './statusView.css';
+import React, { Component } from "react";
+import "./statusView.css";
 
-const StatusView = ({}) => (
-    <div className = 'statusView'>
-        All Changes Saved
-    </div>
-)
+const StatusView = ({ saved }) => (
+  <div className="statusView">
+    {saved ? "All Changes Saved" : "Saving..."}
+  </div>
+);
 
 export default StatusView;
