@@ -37,11 +37,11 @@ export const BooksView = ({ books }) => (
             books.map(book => (
                 <div className='book'>
                     <BookView
-                        linkTo={`/compose/${book.id}`}
+                        linkTo={`/app/compose/${book.id}`}
                         color={book.color}
                     />
                     <div className='text'>
-                        {book.title}
+                        {book.name}
                     </div>
                 </div>
             ))

@@ -157,8 +157,6 @@ app.get('/api/books', isLoggedIn, async (req, res, next) => {
         SELECT id, color, name, content FROM books WHERE userID = ?
     `, [req.user.id])
 
-    console.log(rows)
-
     res.json(rows)
 })
 

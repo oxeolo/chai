@@ -13,7 +13,7 @@ import { Colors } from "./utils/colors";
 const API = `http://localhost:4000/api`;
 Axios.defaults.baseURL = API;
 Axios.interceptors.request.use(config => {
-  config.headers.Authorization = localStorage.getItem("token");
+  config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
   return config;
 });
 
@@ -37,7 +37,7 @@ class App extends Component {
           <Route path="/app/login" component={LoginPage} />
           <Route
             path="/app/books"
-            component={() => <BooksPage books={this.state.books} />}
+            component={BooksPage}
           />
           <Route
             path="/app/compose/:id"
