@@ -175,13 +175,14 @@ app.post('/api/books', isLoggedIn, (req, res, next) => {
     }
 });
 
-app.get('/api/book/:id', isLoggedIn, (req, res) => {
-    res.json({
-        id: 1,
-        color: "#F7FEE7",
-        name: "John's Dream Journal",
-        content: "I had a good dream."
-    })
+app.get('/api/book/:id', isLoggedIn, async (req, res) => {
+
+    const [rows] = await connection.execute(`
+        SELECT id, userID, color, name, content FROM books WHERE id = ?
+    `, [req.params.id])
+
+    res.json(rows[0])
+
 });
 
 app.put('/api/books/:id', isLoggedIn, (req, res, next) => {
