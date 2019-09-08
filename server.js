@@ -161,15 +161,7 @@ app.get('/api/books', isLoggedIn, async (req, res, next) => {
 })
 
 app.post('/api/books', isLoggedIn, (req, res, next) => {
-    if (isLoggedIn) {
-
-        res.sendStatus(201);
-        
-        next();
-    }
-    else {
-        res.sendStatus(403); //if they're not logged in from us do we jus yeet them back to landing?
-    }
+    
 });
 
 app.get('/api/books/:id', isLoggedIn, async (req, res) => {
