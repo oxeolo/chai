@@ -184,15 +184,15 @@ app.get('/api/books', isLoggedIn, async (req, res, next) => {
     res.json(rows)
 })
 
-app.post('/api/books', isLoggedIn, (req, res, next) => {
+app.post('/api/books', isLoggedIn, async (req, res, next) => {
 
-    const {color, name, content} = req.body;
+    const {color, name, content=""} = req.body;
 
     const [response] = await connection.execute(`
         INSERT INTO 
             books(userID, color, name, content) 
         VALUES 
-            ?, ?, ?, ?
+            (?, ?, ?, ?)
     `, [req.user.id, color, name, content])
 
     res.sendStatus(201)
@@ -220,7 +220,7 @@ app.get('/api/books/:id', isLoggedIn, async (req, res) => {
 });
 
 app.put('/api/books/:id', isLoggedIn, async (req, res, next) => {
-    const {content, name, color} = req.body;
+    const {content="", name, color} = req.body;
 
     const [response] = await connection.execute(`
         UPDATE 
