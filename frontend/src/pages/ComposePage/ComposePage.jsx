@@ -17,6 +17,12 @@ const ComposePage = ({ match }) => {
     });
   };
 
+  useEffect(() => {
+    setInterval(() => {
+      loadBook();
+    }, 1000);
+  }, []);
+
   const updateBook = updatedBook => {
     Axios.put(`/books/${match.params.id}`, updatedBook).finally(() => {
       loadBook();
