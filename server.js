@@ -150,7 +150,7 @@ MIDDLEWARE
 
 function isLoggedIn(req, res, next) {
   var receivedToken = req.headers.authorization.split("Bearer ")[1]; //probably gonna change but whatever
-  var decodedToken = jwt.decode(receivedToken, key);
+  var decodedToken = jwt.decode(receivedToken, process.env.JWT_SECRET);
   req.user = decodedToken;
 
   /*assuming we have some code here to make sure their token is legit*/
