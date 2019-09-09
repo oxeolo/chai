@@ -1,5 +1,11 @@
-#configureBookForm{
-    width: 560px;
-    margin-left: auto;
-    margin-right: auto;
+#configureBookForm {
+  width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 500px) {
+  #configureBookForm {
+    width: 80%;
+  }
 }
