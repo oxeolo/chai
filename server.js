@@ -15,7 +15,7 @@ app.use(express.static(`${__dirname}/frontend/build`));
 var jwt = require("jwt-simple");
 var bcrypt = require("bcrypt");
 
-app.listen(4000);
+app.listen(process.env.PORT);
 
 /*
 
