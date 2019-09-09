@@ -3,6 +3,7 @@ import "./booksPage.css";
 import { BooksView } from "../../components/Books/views/BookView";
 import PageLogoView from "../../components/UI/views/PageLogoView";
 import Axios from "axios";
+import { LinkButtonView } from "../../components/UI/views/ButtonView";
 
 const BooksPage = ({}) => {
   const [books, setBooks] = useState([]);

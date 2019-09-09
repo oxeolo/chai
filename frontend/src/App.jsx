@@ -2,13 +2,14 @@ import React, { Component } from "react";
 import "./App.css";
 
 import Axios from "axios";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 
 import LandingPage from "./pages/LandingPage/LandingPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import BooksPage from "./pages/BooksPage/BooksPage";
 import ComposePage from "./pages/ComposePage/ComposePage";
 import { Colors } from "./utils/colors";
+import ConfigureBookPage from "./pages/ConfigureBookPage/ConfigureBookPage";
 
 const API = `http://localhost:4000/api`;
 Axios.defaults.baseURL = API;
@@ -26,16 +27,12 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
+          <Route exact path="/" component={() => <Redirect to="/app" />} />
           <Route exact path="/app" component={LandingPage} />
           <Route path="/app/login" component={LoginPage} />
-          <Route
-            path="/app/books"
-            component={BooksPage}
-          />
-          <Route
-            path="/app/compose/:id"
-            component={ComposePage}
-          />
+          <Route path="/app/books" component={BooksPage} />
+          <Route path="/app/compose/:id" component={ComposePage} />
+          <Route path="/app/configure/" component={ConfigureBookPage} />
         </div>
       </Router>
     );

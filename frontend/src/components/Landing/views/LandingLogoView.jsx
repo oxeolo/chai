@@ -7,7 +7,7 @@ const LandingLogoView = () => (
         <div className = 'landingLogo'>
             chai
         </div>
-        <LinkButtonView to='/login'>
+        <LinkButtonView to='/app/login'>
             Shall we?
         </LinkButtonView>
     </div>

@@ -29,6 +29,22 @@ const LoginFormView = ({ history }) => {
       });
   };
 
+  const register = () => {
+    const { email, password } = creds;
+    setLoading(true);
+    Axios.post("/users", { email, password })
+      .then(response => {
+        login();
+      })
+      .catch(err => {
+          alert("Sorry, your account could not be created.");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+
   return (
     <div className="loginForm">
       <InputView
@@ -45,7 +61,7 @@ const LoginFormView = ({ history }) => {
       <ButtonView loading={loading} onClick={login}>
         login
       </ButtonView>
-      <ButtonView loading={loading} onClick={login}>
+      <ButtonView loading={loading} onClick={register}>
         register
       </ButtonView>
     </div>

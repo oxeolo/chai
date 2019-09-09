@@ -5,7 +5,7 @@ import { Colors } from '../../../utils/colors';
 import Overdrive from 'react-overdrive';
 
 
-const TitleView = ({ title, color }) => {
+const TitleView = ({ name, color }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     setTimeout(() => setIsOpen(true), 100)
@@ -13,12 +13,12 @@ const TitleView = ({ title, color }) => {
     return (<div className='titleView'>
         <BookView
             color={color}
-            linkTo='/books'
+            linkTo='/app/books'
             small
             open = {isOpen}
         />
         <div className='title'>
-            {title}
+            {name}
         </div>
         <div className='divider' />
     </div>

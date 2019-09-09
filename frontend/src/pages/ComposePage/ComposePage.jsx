@@ -11,17 +11,17 @@ const ComposePage = ({ match }) => {
 
   const loadBook = () => {
     Axios.get(`/books/${match.params.id}`).then(response => {
-      setBook(response.data);
-      if(saveTimeout){
-          clearTimeout(saveTimeout);
-          setSaveTimeout(undefined);
+      if (!saveTimeout) {
+        setBook(response.data);
       }
     });
   };
 
-  const updateBook = () => {
-    Axios.put(`/books/${match.params.id}`, book).finally(() => {
+  const updateBook = updatedBook => {
+    Axios.put(`/books/${match.params.id}`, updatedBook).finally(() => {
       loadBook();
+      clearTimeout(saveTimeout);
+      setSaveTimeout(undefined);
     });
   };
 
@@ -31,19 +31,19 @@ const ComposePage = ({ match }) => {
 
   return (
     <div className="composePage">
-      <TitleView title={book.title} color={book.color} />
+      <TitleView name={book.name} color={book.color} />
       <ComposeView
         value={book.content}
         onChange={content => {
+          const updatedBook = { ...book, content };
           setBook({ ...book, content });
-
           if (saveTimeout) {
             clearTimeout(saveTimeout);
           }
           setSaveTimeout(
             setTimeout(() => {
-              updateBook();
-            }, 2000)
+              updateBook(updatedBook);
+            }, 500)
           );
         }}
       />
