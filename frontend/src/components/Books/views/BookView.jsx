@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import "./bookView.css";
 
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import Overdrive from "react-overdrive";
-import { LinkButtonView } from "../../UI/views/ButtonView";
+import ButtonView, { LinkButtonView } from "../../UI/views/ButtonView";
 
 const BookView = ({ small, color, open, linkTo = "" }) => (
   <div className={`bookView ${small && "small"} ${open && "open"}`}>
@@ -27,6 +27,19 @@ const BookView = ({ small, color, open, linkTo = "" }) => (
   </div>
 );
 
+export const LogoutView = withRouter(({ history }) => {
+  return (
+    <ButtonView
+      onClick={() => {
+        localStorage.removeItem("token");
+        history.push("/app");
+      }}
+    >
+      logout
+    </ButtonView>
+  );
+});
+
 export const BooksView = ({ books }) => (
   <div className="booksView">
     {books.map(book => (
@@ -36,6 +49,7 @@ export const BooksView = ({ books }) => (
       </div>
     ))}
     <LinkButtonView to="/app/configure">create book</LinkButtonView>
+    <LogoutView/>
   </div>
 );
 
