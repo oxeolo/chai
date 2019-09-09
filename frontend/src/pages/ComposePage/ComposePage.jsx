@@ -26,7 +26,7 @@ const ComposePage = ({ match }) => {
           }, 0)
         );
       }
-    }, 1000);
+    }, 20000);
   }, []);
 
   const updateBook = updatedBook => {
