@@ -19,7 +19,13 @@ const ComposePage = ({ match }) => {
 
   useEffect(() => {
     setInterval(() => {
-      loadBook();
+      if (!saveTimeout) {
+        setSaveTimeout(
+          setTimeout(() => {
+            loadBook();
+          }, 0)
+        );
+      }
     }, 1000);
   }, []);
 
