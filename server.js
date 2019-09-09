@@ -67,23 +67,31 @@ function createUser(req, res, next) {
 
 app.post('/api/users', async (req, res, next) => {
 
-    console.log(req.body)
+    const {email, password} = req.body;
 
-    const email = req.body.email;
-    const password = req.body.password;
+    const [rows] = await connection.execute(`
+        SELECT 
+            id 
+        FROM 
+            users 
+        WHERE 
+            email = ?
+    `, [email])
+
+    if (rows.length > 0) {
+        res.sendStatus(409);
+    }
 
     const saltRounds = 10;
-
-    //check if email already exists same way as login
 
     bcrypt.hash(password, saltRounds, async function(err, hash) {
         // Store hash in your password DB.
 
-        console.log(err)
-        console.log(hash)
-
         const [response] = await connection.execute(`
-            INSERT INTO users(email, hash) VALUES (?, ?)
+            INSERT INTO 
+                users(email, hash) 
+            VALUES 
+                (?, ?)
         `, [email, hash])
 
         res.sendStatus(201);
@@ -94,16 +102,24 @@ const key = 'abcd';
 
 app.post('/api/users/login', async (req, res, next) => {
 
+    const {email, password} = req.body;
+
     const [rows] = await connection.execute(`
-        SELECT id, hash FROM users WHERE email = ?
-    `, [req.body.email])
+        SELECT 
+            id, 
+            hash 
+        FROM 
+            users 
+        WHERE 
+            email = ?
+    `, [email])
 
     if (rows.length == 0){
         res.sendStatus(404)
     }
 
     //check password
-    const match = await bcrypt.compare(req.body.password, rows[0].hash);
+    const match = await bcrypt.compare(password, rows[0].hash);
     
     if(match) {
 
@@ -154,21 +170,50 @@ app.get('/api/books', isLoggedIn, async (req, res, next) => {
     /* gets user's books from DB. */
 
     const [rows] = await connection.execute(`
-        SELECT id, color, name, content FROM books WHERE userID = ?
+        SELECT 
+            id, 
+            color, 
+            name, 
+            content 
+        FROM 
+            books 
+        WHERE 
+            userID = ?
     `, [req.user.id])
 
     res.json(rows)
 })
 
 app.post('/api/books', isLoggedIn, (req, res, next) => {
+
+    const {color, name, content} = req.body;
+
+    const [response] = await connection.execute(`
+        INSERT INTO 
+            books(userID, color, name, content) 
+        VALUES 
+            ?, ?, ?, ?
+    `, [req.user.id, color, name, content])
+
+    res.sendStatus(201)
     
 });
 
 app.get('/api/books/:id', isLoggedIn, async (req, res) => {
 
     const [rows] = await connection.execute(`
-        SELECT id, userID, color, name, content FROM books WHERE id = ?
-    `, [req.params.id])
+        SELECT 
+            id, 
+            userID, 
+            color, 
+            name, 
+            content 
+        FROM 
+            books 
+        WHERE 
+            id = ? AND 
+            userID = ?
+    `, [req.params.id, req.user.id])
 
     res.json(rows[0])
 
@@ -178,13 +223,16 @@ app.put('/api/books/:id', isLoggedIn, async (req, res, next) => {
     const {content, name, color} = req.body;
 
     const [response] = await connection.execute(`
-        UPDATE books 
+        UPDATE 
+            books 
         SET 
-        content = ?,
-        name = ?,
-        color = ?
-        WHERE id = ?
-    `, [content, name, color, req.params.id])
+            content = ?,
+            name = ?,
+            color = ?
+        WHERE 
+            id = ? AND 
+            userID = ?
+    `, [content, name, color, req.params.id, req.user.id])
 
     res.sendStatus(200)
 })
