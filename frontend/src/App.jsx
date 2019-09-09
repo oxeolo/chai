@@ -14,7 +14,7 @@ import ConfigureBookPage from "./pages/ConfigureBookPage/ConfigureBookPage";
 const API =
   process.env.NODE_ENV === "development"
     ? `http://localhost:4000/api`
-    : "./api";
+    : "/api";
 Axios.defaults.baseURL = API;
 Axios.interceptors.request.use(config => {
   config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
